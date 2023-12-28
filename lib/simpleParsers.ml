@@ -10,7 +10,7 @@ end
 
 module ParserM : Monad = struct
   (* open Core *)
-  type 'a parser = (char list -> ('a * char list) option) [@@deriving sexp]
+  type 'a parser = char list -> ('a * char list) option [@@deriving sexp]
   type 'a m = 'a parser
 
   let return x (i : char list) = Some (x, i)
@@ -104,10 +104,11 @@ let intParser =
 
 open Core
 
-type parseOutput = ((char list * char list) option) [@@deriving sexp]
-let parsedTest =  word ['t'; 'e'; 's'; 't'] %% "testb"
+type parseOutput = (char list * char list) option [@@deriving sexp]
 
-let%expect_test "parser" = 
+let parsedTest = word [ 't'; 'e'; 's'; 't' ] %% "testb"
 
-print_endline (Sexp.to_string (sexp_of_parseOutput parsedTest));
-[%expect {| (((t e s t)())) |}]
+let%expect_test "parser" =
+  print_endline (Sexp.to_string (sexp_of_parseOutput parsedTest));
+  [%expect {| (((t e s t)())) |}]
+;;

@@ -1,16 +1,16 @@
 open! Base
-(* 
-type _ value =
-  | MyInt : int -> int value
-  | MyBool : bool -> bool value *)
+(*
+   type _ value =
+   | MyInt : int -> int value
+   | MyBool : bool -> bool value *)
 
 (* type item = MyInt of int | MyBool of bool *)
 
-(* type expr = 
-    Value of item
-  | If of item * item * item
-  | Plus of item * item
-  | Eq of item * item *)
+(* type expr =
+   Value of item
+   | If of item * item * item
+   | Plus of item * item
+   | Eq of item * item *)
 
 type _ expr =
   | Value : 'a -> 'a expr
