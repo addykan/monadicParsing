@@ -1,0 +1,5 @@
+(executable
+ (public_name scrapwork)
+ (name main)
+ (libraries scrapwork base)
+ (preprocess (pps ppx_expect)))
