@@ -88,10 +88,7 @@ let rec many1 p =
 let many p = many1 p ++ ParserM.return []
 
 let nat =
-  let toNum i =
-    let () = Stdio.print_endline (Char.escaped i) in
-    Char.code i - Char.code '0'
-  in
+  let toNum i = Char.code i - Char.code '0' in
   let eval = List.fold_left (fun acc i -> (10 * acc) + toNum i) 0 in
   ParserM.( >>= ) (many1 digit) (fun ds -> ParserM.return (eval ds))
 ;;
@@ -110,5 +107,5 @@ let parsedTest = word [ 't'; 'e'; 's'; 't' ] %% "testb"
 
 let%expect_test "parser" =
   print_endline (Sexp.to_string (sexp_of_parseOutput parsedTest));
-  [%expect {| (((t e s t)())) |}]
+  [%expect {| (((t e s t)(b))) |}]
 ;;

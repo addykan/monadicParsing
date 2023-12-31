@@ -16,6 +16,7 @@ val ( ++ ) : 'a ParserM.parser -> 'a ParserM.parser -> 'a ParserM.parser
 val ( %% ) : 'a ParserM.parser -> string -> ('a * char list) option
 val ( >> ) : 'a ParserM.parser -> 'b ParserM.parser -> 'b ParserM.parser
 val ( << ) : 'a ParserM.parser -> 'b ParserM.parser -> 'a ParserM.parser
+val exactChar : char -> char ParserM.parser
 val word : char list -> char list ParserM.parser
 val many1 : 'a ParserM.parser -> 'a list ParserM.parser
 val many : 'a ParserM.parser -> 'a list ParserM.parser
