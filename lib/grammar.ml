@@ -23,7 +23,7 @@ type expr =
    | Plus : int expr * int expr -> int expr
    | Eq : int expr * int expr -> bool expr
 
-   let rec eval : type a. a expr -> a = function
+   let rec eval : 'a. 'a expr -> 'a = function
    | Value v -> v
    | If (c, t, e) -> if eval c then eval t else eval e
    | Plus (x, y) -> eval x + eval y
