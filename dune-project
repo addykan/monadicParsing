@@ -15,6 +15,9 @@
 
 (documentation https://url/to/documentation)
 
+(using menhir 2.1)
+
+
 (package
  (name monadicParsing)
  (synopsis "A short synopsis")
