@@ -47,5 +47,5 @@ let%expect_test "basicParserTest" =
   (match parsedInt with
    | Some res -> print_endline (Sexp.to_string (Grammar.sexp_of_expr res))
    | None -> print_endline "failed to parse");
-  [%expect {| (((t e s t)(b))) |}]
+  [%expect {| (Value(MyInt 5)) |}]
 ;;

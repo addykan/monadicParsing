@@ -7,12 +7,15 @@
 %token EQ
 %token PLUS
 %token EOF
+%left EQ
+%left PLUS
+%right ELSE
 %type <Grammar.expr> item
 %start <Grammar.expr option> prog
 %%
 prog: 
-  | EOF { None }
-  | i = item {Some i}
+  | EOF { print_endline "EOF"; None }
+  | i = item; EOF {Some i}
 ;
 item:
   | num = INT 
