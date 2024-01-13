@@ -140,4 +140,14 @@ let%expect_test "testConditional" =
   [%expect {| (If(Eq(Value(MyInt 5))(Value(MyInt 3)))(Value(MyInt 9))(Plus(Value(MyInt 3))(Value(MyInt 5)))) |}]
 ;;
 
+let%expect_test "testNestedParens" =
+  (* let inx = In_channel.create "./test.txt" in
+  let lexbuf = Lexing.from_channel inx in *)
+  let parsedInt = parse_with_error (Lexing.from_string "(5 + (if 5=4 then 9 else 12))") in
+  (match parsedInt with
+   | Some res -> print_endline (Sexp.to_string (Grammar.sexp_of_expr res))
+   | None -> print_endline "failed to parse");
+  [%expect {| (Plus(Value(MyInt 5))(If(Eq(Value(MyInt 5))(Value(MyInt 4)))(Value(MyInt 9))(Value(MyInt 12)))) |}]
+;;
+
 
