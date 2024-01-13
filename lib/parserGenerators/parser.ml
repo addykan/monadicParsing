@@ -99,3 +99,45 @@ let%expect_test "testConditional" =
    | None -> print_endline "failed to parse");
   [%expect {| (Plus(If(Eq(Value(MyInt 5))(Value(MyInt 3)))(Plus(Value(MyInt 4))(Value(MyInt 5)))(Value(MyInt 3)))(Value(MyInt 9))) |}]
 ;;
+
+let%expect_test "testSimpleParen" =
+  (* let inx = In_channel.create "./test.txt" in
+  let lexbuf = Lexing.from_channel inx in *)
+  let parsedInt = parse_with_error (Lexing.from_string "(5)") in
+  (match parsedInt with
+   | Some res -> print_endline (Sexp.to_string (Grammar.sexp_of_expr res))
+   | None -> print_endline "failed to parse");
+  [%expect {| (Value(MyInt 5)) |}]
+;;
+
+let%expect_test "testSimpleMathExpr" =
+  (* let inx = In_channel.create "./test.txt" in
+  let lexbuf = Lexing.from_channel inx in *)
+  let parsedInt = parse_with_error (Lexing.from_string "4 + (5 + 3)") in
+  (match parsedInt with
+   | Some res -> print_endline (Sexp.to_string (Grammar.sexp_of_expr res))
+   | None -> print_endline "failed to parse");
+  [%expect {| (Plus(Value(MyInt 4))(Plus(Value(MyInt 5))(Value(MyInt 3)))) |}]
+;;
+
+let%expect_test "testConditionalNoParens" =
+  (* let inx = In_channel.create "./test.txt" in
+  let lexbuf = Lexing.from_channel inx in *)
+  let parsedInt = parse_with_error (Lexing.from_string "if 5 = 3 then 9 else 3 + 5") in
+  (match parsedInt with
+   | Some res -> print_endline (Sexp.to_string (Grammar.sexp_of_expr res))
+   | None -> print_endline "failed to parse");
+  [%expect {| (Plus(If(Eq(Value(MyInt 5))(Value(MyInt 3)))(Value(MyInt 9))(Value(MyInt 3)))(Value(MyInt 5))) |}]
+;;
+
+let%expect_test "testConditional" =
+  (* let inx = In_channel.create "./test.txt" in
+  let lexbuf = Lexing.from_channel inx in *)
+  let parsedInt = parse_with_error (Lexing.from_string "if (5 = 3) then 9 else (3 + 5)") in
+  (match parsedInt with
+   | Some res -> print_endline (Sexp.to_string (Grammar.sexp_of_expr res))
+   | None -> print_endline "failed to parse");
+  [%expect {| (If(Eq(Value(MyInt 5))(Value(MyInt 3)))(Value(MyInt 9))(Plus(Value(MyInt 3))(Value(MyInt 5)))) |}]
+;;
+
+

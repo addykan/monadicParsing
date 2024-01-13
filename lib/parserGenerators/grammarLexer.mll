@@ -29,5 +29,7 @@ rule read =
   | "if" { IF }
   | "then" { THEN }
   | "else" { ELSE }
+  | "(" { LPAREN }
+  | ")" { RPAREN }
   | eof { EOF }
   | _ {raise (SyntaxError "Unexpected character in buffer")}

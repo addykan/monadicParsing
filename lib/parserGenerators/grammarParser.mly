@@ -6,6 +6,8 @@
 %token ELSE
 %token EQ
 %token PLUS
+%token LPAREN
+%token RPAREN
 %token EOF
 %left EQ
 %left PLUS
@@ -30,4 +32,6 @@ item:
     { Plus (x, y) }
   | x = item; EQ; y = item 
     { Eq (x, y) }
+  | LPAREN; x = item; RPAREN
+    { x }
 ;
