@@ -10,7 +10,7 @@ let print_position outx lexbuf =
 let parse_with_error lexbuf =
   try GrammarParser.prog GrammarLexer.read lexbuf with
   | SyntaxError msg ->
-    print_endline "fail";
+    print_endline "syntax error";
     printf "%a: %s\n" print_position lexbuf msg;
     None
   | GrammarParser.Error ->
@@ -48,4 +48,54 @@ let%expect_test "basicParserTest" =
    | Some res -> print_endline (Sexp.to_string (Grammar.sexp_of_expr res))
    | None -> print_endline "failed to parse");
   [%expect {| (Value(MyInt 5)) |}]
+;;
+
+let%expect_test "testPlusNoWhitespace" =
+  (* let inx = In_channel.create "./test.txt" in
+  let lexbuf = Lexing.from_channel inx in *)
+  let parsedInt = parse_with_error (Lexing.from_string "5+5") in
+  (match parsedInt with
+   | Some res -> print_endline (Sexp.to_string (Grammar.sexp_of_expr res))
+   | None -> print_endline "failed to parse");
+  [%expect {| (Plus(Value(MyInt 5))(Value(MyInt 5))) |}]
+;;
+
+let%expect_test "testEqNoWhitespace" =
+  (* let inx = In_channel.create "./test.txt" in
+  let lexbuf = Lexing.from_channel inx in *)
+  let parsedInt = parse_with_error (Lexing.from_string "4=3") in
+  (match parsedInt with
+   | Some res -> print_endline (Sexp.to_string (Grammar.sexp_of_expr res))
+   | None -> print_endline "failed to parse");
+  [%expect {| (Eq(Value(MyInt 4))(Value(MyInt 3))) |}]
+;;
+
+let%expect_test "testPlusWithWhitespace" =
+  (* let inx = In_channel.create "./test.txt" in
+  let lexbuf = Lexing.from_channel inx in *)
+  let parsedInt = parse_with_error (Lexing.from_string "5 + 5") in
+  (match parsedInt with
+   | Some res -> print_endline (Sexp.to_string (Grammar.sexp_of_expr res))
+   | None -> print_endline "failed to parse");
+  [%expect {| (Plus(Value(MyInt 5))(Value(MyInt 5))) |}]
+;;
+
+let%expect_test "testEqWithWhitespace" =
+  (* let inx = In_channel.create "./test.txt" in
+  let lexbuf = Lexing.from_channel inx in *)
+  let parsedInt = parse_with_error (Lexing.from_string "4 = 3") in
+  (match parsedInt with
+   | Some res -> print_endline (Sexp.to_string (Grammar.sexp_of_expr res))
+   | None -> print_endline "failed to parse");
+  [%expect {| (Eq(Value(MyInt 4))(Value(MyInt 3))) |}]
+;;
+
+let%expect_test "testConditional" =
+  (* let inx = In_channel.create "./test.txt" in
+  let lexbuf = Lexing.from_channel inx in *)
+  let parsedInt = parse_with_error (Lexing.from_string "if 5 = 3 then 4 + 5 else 3 + 9") in
+  (match parsedInt with
+   | Some res -> print_endline (Sexp.to_string (Grammar.sexp_of_expr res))
+   | None -> print_endline "failed to parse");
+  [%expect {| (Plus(If(Eq(Value(MyInt 5))(Value(MyInt 3)))(Plus(Value(MyInt 4))(Value(MyInt 5)))(Value(MyInt 3)))(Value(MyInt 9))) |}]
 ;;
